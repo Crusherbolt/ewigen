@@ -1,0 +1,245 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# ML Models & Data
+*.pth
+*.pt
+*.ckpt
+*.h5
+*.pkl
+*.pickle
+models/
+checkpoints/
+data/
+datasets/
+*.npy
+*.npz
+
+# Video & Media Files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.flv
+*.wmv
+*.wav
+*.mp3
+*.ogg
+videos/
+media/
+uploads/
+temp/
+tmp/
+
+# 3D Files
+*.obj
+*.fbx
+*.blend
+*.blend1
+*.ply
+*.stl
+*.usd
+*.usda
+*.usdc
+scenes/
+meshes/
+
+# Node.js (Frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+yarn.lock
+.next/
+out/
+.nuxt/
+dist/
+
+# Docker
+*.tar
+docker-compose.override.yml
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# OS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Secrets & Keys
+*.pem
+*.key
+*.crt
+*.p12
+credentials.json
+service-account.json
+
+# Large files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Unity/Unreal (VR App)
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+
+# Monitoring & Profiling
+.profiling/
+*.prof
+
+# Documentation builds
+docs/_build/
+site/
+
+# Redis dump
+dump.rdb
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Sentry
+.sentryclirc
+
+# Made with Bob
+
+
+# Internal documentation and planning files
+project.md
+ARCHITECTURE.md
+ARCHITECTURE_DIAGRAM.md
+IMPLEMENTATION_PLAN.md
+PROJECT_STATUS.md
+PROGRESS_UPDATE.md
+FINAL_SUMMARY.md
+COST_OPTIMIZATION.md
+AWS_DATASET_MARKETPLACE_GUIDE.md
+CLOUD_DEPLOYMENT_GUIDE.md
+TESTING_AND_DEPLOYMENT.md
+TECHNICAL_SPECIFICATIONS.md
+QUICKSTART.md
+SETUP_GUIDE.md
+BUSINESS_NAME_ANALYSIS.md
+GITHUB_PAGES_SETUP.md
+
+# Internal scripts and notes
+scripts/internal/
+docs/internal/
+notes/
+planning/
+.cursor/
+.aider*
+.claude*
+.gpt*
+prompts/
+conversations/

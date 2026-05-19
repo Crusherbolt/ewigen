@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ewigen - Timeless Moments | System Architecture</title>
+    <meta name="description" content="Ewigen - Preserve timeless moments forever. Virtual environment reconstruction platform for immersive VR experiences and robotics training.">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            background: linear-gradient(135deg, #e94560 0%, #533483 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+        
+        .tagline {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 300;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            color: #764ba2;
+            margin: 30px 0 15px 0;
+        }
+        
+        .mermaid {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            margin: 30px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -46px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+        
+        .timeline-title {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-time {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-desc {
+            color: #666;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⏳ Ewigen</h1>
+            <p class="tagline">Timeless Moments - Preserve Your Most Precious Memories Forever</p>
+        </header>
+
+        <!-- High-Level Architecture -->
+        <div class="section">
+            <h2>🏗️ System Architecture Overview</h2>
+            <div class="mermaid">
+graph TB
+    subgraph Users["👥 USER INTERFACES"]
+        Web["🌐 Web Dashboard<br/>(Next.js)"]
+        Mobile["📱 Mobile App<br/>(React Native)"]
+        VR["🥽 VR Headset<br/>(Unity)"]
+    end
+    
+    subgraph API["⚡ API GATEWAY"]
+        FastAPI["FastAPI Backend<br/>Authentication | Projects | Payments"]
+    end
+    
+    subgraph Storage["💾 DATA STORAGE"]
+        Postgres["PostgreSQL<br/>Metadata"]
+        Redis["Redis<br/>Cache & Queue"]
+        MinIO["MinIO<br/>Videos & Assets"]
+    end
+    
+    subgraph Processing["🔄 PROCESSING"]
+        Celery["Celery Workers<br/>Distributed Tasks"]
+    end
+    
+    subgraph ML["🤖 ML PIPELINE"]
+        Video["Video Processing"]
+        Recon["3D Reconstruction"]
+        Avatar["Avatar Generation"]
+        Voice["Voice Cloning"]
+        AI["AI Intelligence"]
+    end
+    
+    Web --> FastAPI
+    Mobile --> FastAPI
+    VR --> FastAPI
+    
+    FastAPI --> Postgres
+    FastAPI --> Redis
+    FastAPI --> MinIO
+    
+    FastAPI --> Celery
+    
+    Celery --> Video
+    Video --> Recon
+    Recon --> Avatar
+    Avatar --> Voice
+    Voice --> AI
+    
+    AI --> MinIO
+    
+    style Users fill:#667eea,color:#fff
+    style API fill:#764ba2,color:#fff
+    style Storage fill:#48bb78,color:#fff
+    style Processing fill:#ed8936,color:#fff
+    style ML fill:#e53e3e,color:#fff
+            </div>
+        </div>
+
+        <!-- Processing Pipeline -->
+        <div class="section">
+            <h2>🔄 10-Stage ML Processing Pipeline</h2>
+            <div class="mermaid">
+graph LR
+    A["📹 Upload<br/>Videos"] --> B["🎬 Stage 1<br/>Preprocessing"]
+    B --> C["📷 Stage 2<br/>Camera Calibration"]
+    C --> D["🌐 Stage 3<br/>NeRF Training"]
+    D --> E["✨ Stage 4<br/>Gaussian Splatting"]
+    E --> F["👤 Stage 5<br/>Human Detection"]
+    F --> G["🤸 Stage 6<br/>Pose Estimation"]
+    G --> H["🎭 Stage 7<br/>Avatar Generation"]
+    H --> I["🎤 Stage 8<br/>Voice Cloning"]
+    I --> J["🧠 Stage 9<br/>AI Training"]
+    J --> K["📦 Stage 10<br/>Dataset Export"]
+    K --> L["🥽 VR Experience"]
+    
+    style A fill:#667eea,color:#fff
+    style L fill:#667eea,color:#fff
+    style B fill:#48bb78,color:#fff
+    style C fill:#48bb78,color:#fff
+    style D fill:#ed8936,color:#fff
+    style E fill:#ed8936,color:#fff
+    style F fill:#e53e3e,color:#fff
+    style G fill:#e53e3e,color:#fff
+    style H fill:#9f7aea,color:#fff
+    style I fill:#9f7aea,color:#fff
+    style J fill:#38b2ac,color:#fff
+    style K fill:#38b2ac,color:#fff
+            </div>
+        </div>
+
+        <!-- Detailed Data Flow -->
+        <div class="section">
+            <h2>📊 Detailed Data Flow</h2>
+            <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Web as Web Dashboard
+    participant API as FastAPI
+    participant Queue as Redis Queue
+    participant Worker as Celery Worker
+    participant ML as ML Pipeline
+    participant Storage as MinIO
+    participant VR as VR App
+    
+    User->>Web: Upload Videos
+    Web->>API: POST /projects
+    API->>Storage: Store Videos
+    API->>Queue: Queue Processing Job
+    API-->>Web: Job ID
+    
+    Queue->>Worker: Pick Job
+    Worker->>ML: Start Pipeline
+    
+    ML->>ML: Stage 1-2: Preprocess & Calibrate
+    ML-->>API: Progress 20%
+    
+    ML->>ML: Stage 3-4: NeRF & Gaussian
+    ML-->>API: Progress 40%
+    
+    ML->>ML: Stage 5-7: Detect & Avatar
+    ML-->>API: Progress 60%
+    
+    ML->>ML: Stage 8-9: Voice & AI
+    ML-->>API: Progress 80%
+    
+    ML->>ML: Stage 10: Export
+    ML->>Storage: Save Results
+    ML-->>API: Complete 100%
+    
+    API-->>Web: Processing Complete
+    User->>VR: Launch VR App
+    VR->>API: Load Scene
+    API->>Storage: Fetch Assets
+    Storage-->>VR: Stream Data
+    VR-->>User: Immersive Experience
+            </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="section">
+            <h2>🛠️ Technology Stack</h2>
+            
+            <h3>Backend & API</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">FastAPI</span>
+                <span class="tech-badge">Python 3.10+</span>
+                <span class="tech-badge">PostgreSQL</span>
+                <span class="tech-badge">Redis</span>
+                <span class="tech-badge">Celery</span>
+                <span class="tech-badge">MinIO</span>
+            </div>
+            
+            <h3>Machine Learning</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">PyTorch</span>
+                <span class="tech-badge">NeRF (Instant-NGP)</span>
+                <span class="tech-badge">Gaussian Splatting</span>
+                <span class="tech-badge">COLMAP</span>
+                <span class="tech-badge">YOLOv8</span>
+                <span class="tech-badge">MediaPipe</span>
+                <span class="tech-badge">SMPL-X</span>
+                <span class="tech-badge">Whisper</span>
+                <span class="tech-badge">GPT-4</span>
+                <span class="tech-badge">Claude</span>
+            </div>
+            
+            <h3>Frontend & VR</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">Next.js 14</span>
+                <span class="tech-badge">React 18</span>
+                <span class="tech-badge">TypeScript</span>
+                <span class="tech-badge">Unity</span>
+                <span class="tech-badge">XR Toolkit</span>
+                <span class="tech-badge">Three.js</span>
+            </div>
+            
+            <h3>Infrastructure</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">Docker</span>
+                <span class="tech-badge">CUDA 11.8+</span>
+                <span class="tech-badge">NGINX</span>
+                <span class="tech-badge">GitHub Actions</span>
+                <span class="tech-badge">AWS/GCP/Azure</span>
+            </div>
+        </div>
+
+        <!-- Processing Timeline -->
+        <div class="section">
+            <h2>⏱️ Processing Timeline (50 min video)</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 1: Video Preprocessing</div>
+                    <div class="timeline-time">5-10 minutes</div>
+                    <div class="timeline-desc">Extract frames, synchronize videos, quality checks</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 2: Camera Calibration</div>
+                    <div class="timeline-time">15-30 minutes</div>
+                    <div class="timeline-desc">COLMAP feature detection, matching, SfM reconstruction</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 3: NeRF Training</div>
+                    <div class="timeline-time">2-4 hours</div>
+                    <div class="timeline-desc">Neural radiance field training with Instant-NGP</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 4: Gaussian Splatting</div>
+                    <div class="timeline-time">30-60 minutes</div>
+                    <div class="timeline-desc">Optimize for real-time rendering (60+ FPS)</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 5: Human Detection</div>
+                    <div class="timeline-time">10-20 minutes</div>
+                    <div class="timeline-desc">YOLOv8 detection + DeepSORT tracking</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 6: Pose Estimation</div>
+                    <div class="timeline-time">15-30 minutes</div>
+                    <div class="timeline-desc">MediaPipe 33-point pose estimation</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 7: Avatar Generation</div>
+                    <div class="timeline-time">20-40 minutes</div>
+                    <div class="timeline-desc">SMPL-X parametric body model with textures</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 8: Voice Cloning</div>
+                    <div class="timeline-time">10-20 minutes</div>
+                    <div class="timeline-desc">Extract audio, clone voices, train TTS</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 9: AI Training</div>
+                    <div class="timeline-time">5-10 minutes</div>
+                    <div class="timeline-desc">Build conversational AI with GPT-4/Claude</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-title">Stage 10: Dataset Export</div>
+                    <div class="timeline-time">10-20 minutes</div>
+                    <div class="timeline-desc">Package and export USD, ROS, URDF formats</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px;">
+                <div style="font-size: 2em; font-weight: bold;">Total: 4-7 hours</div>
+                <div style="font-size: 1.2em; opacity: 0.9;">Complete VR world with interactive AI characters</div>
+            </div>
+        </div>
+
+        <!-- Performance Stats -->
+        <div class="section">
+            <h2>📈 Performance Metrics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">60+</div>
+                    <div class="stat-label">FPS in VR</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4-7</div>
+                    <div class="stat-label">Hours Processing</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10-25</div>
+                    <div class="stat-label">GB per Project</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">Processing Stages</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Use Cases -->
+        <div class="section">
+            <h2>🎯 Use Cases</h2>
+            <div class="mermaid">
+mindmap
+  root((Ewigen))
+    B2C Consumer
+      Weddings
+        Relive ceremony
+        Interact with guests
+        Preserve memories
+      Family Events
+        Birthdays
+        Reunions
+        Celebrations
+      Entertainment
+        Concerts
+        Performances
+        Experiences
+    B2B Enterprise
+      Robotics Training
+        Humanoid robots
+        Navigation
+        Manipulation
+      AI Research
+        Synthetic data
+        Benchmarking
+        Testing
+      Real Estate
+        Virtual tours
+        Property showcase
+        Architecture
+            </div>
+        </div>
+
+        <!-- Deployment Architecture -->
+        <div class="section">
+            <h2>☁️ Cloud Deployment Architecture</h2>
+            <div class="mermaid">
+graph TB
+    subgraph Internet["🌐 INTERNET"]
+        Users["Users"]
+    end
+    
+    subgraph CDN["🚀 CDN Layer"]
+        CloudFront["CloudFront/CloudFlare"]
+    end
+    
+    subgraph LoadBalancer["⚖️ Load Balancer"]
+        ALB["Application Load Balancer"]
+    end
+    
+    subgraph WebTier["🖥️ Web Tier (Auto-scaling)"]
+        Web1["Next.js Instance 1"]
+        Web2["Next.js Instance 2"]
+        Web3["Next.js Instance N"]
+    end
+    
+    subgraph APITier["⚡ API Tier (Auto-scaling)"]
+        API1["FastAPI Instance 1"]
+        API2["FastAPI Instance 2"]
+        API3["FastAPI Instance N"]
+    end
+    
+    subgraph WorkerTier["🔧 Worker Tier (GPU Instances)"]
+        Worker1["Celery Worker 1<br/>RTX 4090"]
+        Worker2["Celery Worker 2<br/>RTX 4090"]
+        Worker3["Celery Worker N<br/>RTX 4090"]
+    end
+    
+    subgraph DataTier["💾 Data Tier"]
+        RDS["RDS PostgreSQL<br/>Multi-AZ"]
+        ElastiCache["ElastiCache Redis<br/>Cluster"]
+        S3["S3/MinIO<br/>Object Storage"]
+    end
+    
+    Users --> CloudFront
+    CloudFront --> ALB
+    ALB --> Web1
+    ALB --> Web2
+    ALB --> Web3
+    
+    Web1 --> API1
+    Web2 --> API2
+    Web3 --> API3
+    
+    API1 --> RDS
+    API2 --> RDS
+    API3 --> RDS
+    
+    API1 --> ElastiCache
+    API2 --> ElastiCache
+    API3 --> ElastiCache
+    
+    API1 --> S3
+    API2 --> S3
+    API3 --> S3
+    
+    ElastiCache --> Worker1
+    ElastiCache --> Worker2
+    ElastiCache --> Worker3
+    
+    Worker1 --> S3
+    Worker2 --> S3
+    Worker3 --> S3
+    
+    style Internet fill:#667eea,color:#fff
+    style CDN fill:#48bb78,color:#fff
+    style LoadBalancer fill:#ed8936,color:#fff
+    style WebTier fill:#9f7aea,color:#fff
+    style APITier fill:#38b2ac,color:#fff
+    style WorkerTier fill:#e53e3e,color:#fff
+    style DataTier fill:#764ba2,color:#fff
+            </div>
+        </div>
+
+        <footer>
+            <p>⏳ Ewigen - Timeless Moments</p>
+            <p>Preserve timeless moments through cutting-edge AI, 3D reconstruction, and VR technology</p>
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#e94560',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#533483',
+                lineColor: '#533483',
+                secondaryColor: '#48bb78',
+                tertiaryColor: '#ed8936'
+            }
+        });
+    </script>
+</body>
+</html>
