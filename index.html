@@ -6,6 +6,9 @@
     <title>Ewigen - Timeless Moments | System Architecture</title>
     <meta name="description" content="Ewigen - Preserve timeless moments forever. Virtual environment reconstruction platform for immersive VR experiences and robotics training.">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,196 +16,542 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --primary: #e94560;
+            --secondary: #533483;
+            --dark-1: #0a0e27;
+            --dark-2: #16213e;
+            --dark-3: #1a1a2e;
+            --accent: #00d9ff;
+            --text-light: #e0e0e0;
+            --text-muted: #a0a0a0;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: #333;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--dark-1);
+            color: var(--text-light);
             line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--dark-1) 0%, var(--dark-2) 50%, var(--dark-3) 100%);
+        }
+        
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(233, 69, 96, 0.1) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 100px 20px 40px;
         }
         
-        header {
+        /* Hero Section */
+        .hero {
             text-align: center;
-            padding: 40px 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 80px 20px;
+            position: relative;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(233, 69, 96, 0.1);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            border-radius: 50px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
         }
         
         h1 {
-            font-size: 3.5em;
-            background: linear-gradient(135deg, #e94560 0%, #533483 100%);
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            font-weight: 800;
-            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
         }
         
         .tagline {
-            font-size: 1.3em;
-            color: #666;
+            font-size: 1.5rem;
+            color: var(--text-muted);
             font-weight: 300;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
         }
         
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+        
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Section Styles */
         .section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 30px;
+            padding: 60px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
         }
         
         h2 {
-            font-size: 2em;
-            color: #667eea;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        h3 {
-            font-size: 1.5em;
-            color: #764ba2;
-            margin: 30px 0 15px 0;
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
         }
         
+        /* Mermaid Diagrams */
         .mermaid {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            gap: 30px;
+            margin: 40px 0;
         }
         
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, rgba(83, 52, 131, 0.1) 100%);
+            padding: 40px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            border: 1px solid rgba(233, 69, 96, 0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.2);
+        }
+        
+        .stat-card:hover::before {
+            transform: scaleX(1);
         }
         
         .stat-number {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
         }
         
         .stat-label {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .tech-badge {
-            background: #667eea;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
+            font-size: 1.1rem;
+            color: var(--text-muted);
             font-weight: 500;
         }
         
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .tech-badge {
+            background: rgba(233, 69, 96, 0.1);
+            color: var(--primary);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid rgba(233, 69, 96, 0.2);
+            transition: all 0.3s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .tech-badge:hover {
+            background: rgba(233, 69, 96, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.3);
+        }
+        
+        /* Timeline */
         .timeline {
             position: relative;
-            padding-left: 40px;
-            margin: 30px 0;
+            padding-left: 60px;
+            margin: 40px 0;
         }
         
         .timeline::before {
             content: '';
             position: absolute;
-            left: 0;
+            left: 20px;
             top: 0;
             bottom: 0;
             width: 3px;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
         }
         
         .timeline-item {
             position: relative;
-            margin-bottom: 30px;
-            padding-left: 30px;
+            margin-bottom: 40px;
+            padding-left: 40px;
         }
         
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -46px;
+            left: -48px;
             top: 5px;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            background: #667eea;
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px #667eea;
+            background: var(--primary);
+            border: 4px solid var(--dark-1);
+            box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.2);
+            z-index: 1;
         }
         
         .timeline-title {
-            font-weight: bold;
-            color: #667eea;
-            font-size: 1.2em;
-            margin-bottom: 5px;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
         }
         
         .timeline-time {
-            color: #999;
-            font-size: 0.9em;
-            margin-bottom: 10px;
+            color: var(--accent);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
         }
         
         .timeline-desc {
-            color: #666;
+            color: var(--text-muted);
+            line-height: 1.6;
         }
         
+        /* Footer */
         footer {
             text-align: center;
-            padding: 30px;
-            color: white;
-            font-size: 0.9em;
+            padding: 60px 20px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
         
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-text {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(233, 69, 96, 0.3);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2em;
+                font-size: 2.5rem;
             }
             
             .section {
-                padding: 20px;
+                padding: 30px 20px;
             }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Scroll Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            z-index: 9999;
+            transition: width 0.1s;
         }
     </style>
 </head>
 <body>
+    <div class="bg-animation"></div>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <span>⏳</span> Ewigen
+            </div>
+            <ul class="nav-links">
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#pipeline">Pipeline</a></li>
+                <li><a href="#tech">Technology</a></li>
+                <li><a href="#performance">Performance</a></li>
+                <li><a href="https://github.com/Crusherbolt/ewigen" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
-        <header>
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-badge">🤖 Synthetic Dataset Generation Platform</div>
             <h1>⏳ Ewigen</h1>
             <p class="tagline">Timeless Moments - Preserve Your Most Precious Memories Forever</p>
-        </header>
+            <div class="cta-buttons">
+                <a href="https://github.com/Crusherbolt/ewigen" class="btn btn-primary" target="_blank">
+                    <span>View on GitHub</span>
+                    <span>→</span>
+                </a>
+                <a href="#architecture" class="btn btn-secondary">
+                    <span>Explore Architecture</span>
+                </a>
+            </div>
+        </div>
 
-        <!-- High-Level Architecture -->
-        <div class="section">
+        <!-- System Architecture -->
+        <div class="section" id="architecture">
             <h2>🏗️ System Architecture Overview</h2>
+            <p class="section-subtitle">High-level view of the complete platform architecture</p>
             <div class="mermaid">
 graph TB
     subgraph Users["👥 USER INTERFACES"]
@@ -251,17 +600,18 @@ graph TB
     
     AI --> MinIO
     
-    style Users fill:#667eea,color:#fff
-    style API fill:#764ba2,color:#fff
-    style Storage fill:#48bb78,color:#fff
-    style Processing fill:#ed8936,color:#fff
-    style ML fill:#e53e3e,color:#fff
+    style Users fill:#e94560,color:#fff
+    style API fill:#533483,color:#fff
+    style Storage fill:#00d9ff,color:#000
+    style Processing fill:#f4a261,color:#000
+    style ML fill:#2a9d8f,color:#fff
             </div>
         </div>
 
         <!-- Processing Pipeline -->
-        <div class="section">
+        <div class="section" id="pipeline">
             <h2>🔄 10-Stage ML Processing Pipeline</h2>
+            <p class="section-subtitle">From video input to VR-ready output</p>
             <div class="mermaid">
 graph LR
     A["📹 Upload<br/>Videos"] --> B["🎬 Stage 1<br/>Preprocessing"]
@@ -276,74 +626,51 @@ graph LR
     J --> K["📦 Stage 10<br/>Dataset Export"]
     K --> L["🥽 VR Experience"]
     
-    style A fill:#667eea,color:#fff
-    style L fill:#667eea,color:#fff
-    style B fill:#48bb78,color:#fff
-    style C fill:#48bb78,color:#fff
-    style D fill:#ed8936,color:#fff
-    style E fill:#ed8936,color:#fff
-    style F fill:#e53e3e,color:#fff
-    style G fill:#e53e3e,color:#fff
-    style H fill:#9f7aea,color:#fff
-    style I fill:#9f7aea,color:#fff
-    style J fill:#38b2ac,color:#fff
-    style K fill:#38b2ac,color:#fff
+    style A fill:#e94560,color:#fff
+    style L fill:#e94560,color:#fff
+    style B fill:#00d9ff,color:#000
+    style C fill:#00d9ff,color:#000
+    style D fill:#f4a261,color:#000
+    style E fill:#f4a261,color:#000
+    style F fill:#2a9d8f,color:#fff
+    style G fill:#2a9d8f,color:#fff
+    style H fill:#533483,color:#fff
+    style I fill:#533483,color:#fff
+    style J fill:#e76f51,color:#fff
+    style K fill:#e76f51,color:#fff
             </div>
         </div>
 
-        <!-- Detailed Data Flow -->
-        <div class="section">
-            <h2>📊 Detailed Data Flow</h2>
-            <div class="mermaid">
-sequenceDiagram
-    participant User
-    participant Web as Web Dashboard
-    participant API as FastAPI
-    participant Queue as Redis Queue
-    participant Worker as Celery Worker
-    participant ML as ML Pipeline
-    participant Storage as MinIO
-    participant VR as VR App
-    
-    User->>Web: Upload Videos
-    Web->>API: POST /projects
-    API->>Storage: Store Videos
-    API->>Queue: Queue Processing Job
-    API-->>Web: Job ID
-    
-    Queue->>Worker: Pick Job
-    Worker->>ML: Start Pipeline
-    
-    ML->>ML: Stage 1-2: Preprocess & Calibrate
-    ML-->>API: Progress 20%
-    
-    ML->>ML: Stage 3-4: NeRF & Gaussian
-    ML-->>API: Progress 40%
-    
-    ML->>ML: Stage 5-7: Detect & Avatar
-    ML-->>API: Progress 60%
-    
-    ML->>ML: Stage 8-9: Voice & AI
-    ML-->>API: Progress 80%
-    
-    ML->>ML: Stage 10: Export
-    ML->>Storage: Save Results
-    ML-->>API: Complete 100%
-    
-    API-->>Web: Processing Complete
-    User->>VR: Launch VR App
-    VR->>API: Load Scene
-    API->>Storage: Fetch Assets
-    Storage-->>VR: Stream Data
-    VR-->>User: Immersive Experience
+        <!-- Performance Metrics -->
+        <div class="section" id="performance">
+            <h2>📈 Performance Metrics</h2>
+            <p class="section-subtitle">Real-world performance benchmarks</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">60+</div>
+                    <div class="stat-label">FPS in VR</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4-7</div>
+                    <div class="stat-label">Hours Processing</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10-25</div>
+                    <div class="stat-label">GB per Project</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">Processing Stages</div>
+                </div>
             </div>
         </div>
 
         <!-- Technology Stack -->
-        <div class="section">
+        <div class="section" id="tech">
             <h2>🛠️ Technology Stack</h2>
+            <p class="section-subtitle">Built with cutting-edge technologies</p>
             
-            <h3>Backend & API</h3>
+            <h3 style="color: var(--primary); margin-top: 2rem;">Backend & API</h3>
             <div class="tech-stack">
                 <span class="tech-badge">FastAPI</span>
                 <span class="tech-badge">Python 3.10+</span>
@@ -353,10 +680,10 @@ sequenceDiagram
                 <span class="tech-badge">MinIO</span>
             </div>
             
-            <h3>Machine Learning</h3>
+            <h3 style="color: var(--primary); margin-top: 2rem;">Machine Learning</h3>
             <div class="tech-stack">
                 <span class="tech-badge">PyTorch</span>
-                <span class="tech-badge">NeRF (Instant-NGP)</span>
+                <span class="tech-badge">NeRF</span>
                 <span class="tech-badge">Gaussian Splatting</span>
                 <span class="tech-badge">COLMAP</span>
                 <span class="tech-badge">YOLOv8</span>
@@ -367,7 +694,7 @@ sequenceDiagram
                 <span class="tech-badge">Claude</span>
             </div>
             
-            <h3>Frontend & VR</h3>
+            <h3 style="color: var(--primary); margin-top: 2rem;">Frontend & VR</h3>
             <div class="tech-stack">
                 <span class="tech-badge">Next.js 14</span>
                 <span class="tech-badge">React 18</span>
@@ -376,20 +703,12 @@ sequenceDiagram
                 <span class="tech-badge">XR Toolkit</span>
                 <span class="tech-badge">Three.js</span>
             </div>
-            
-            <h3>Infrastructure</h3>
-            <div class="tech-stack">
-                <span class="tech-badge">Docker</span>
-                <span class="tech-badge">CUDA 11.8+</span>
-                <span class="tech-badge">NGINX</span>
-                <span class="tech-badge">GitHub Actions</span>
-                <span class="tech-badge">AWS/GCP/Azure</span>
-            </div>
         </div>
 
         <!-- Processing Timeline -->
         <div class="section">
-            <h2>⏱️ Processing Timeline (50 min video)</h2>
+            <h2>⏱️ Processing Timeline</h2>
+            <p class="section-subtitle">Estimated processing time for 50 minutes of video</p>
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-title">Stage 1: Video Preprocessing</div>
@@ -416,205 +735,70 @@ sequenceDiagram
                 </div>
                 
                 <div class="timeline-item">
-                    <div class="timeline-title">Stage 5: Human Detection</div>
-                    <div class="timeline-time">10-20 minutes</div>
-                    <div class="timeline-desc">YOLOv8 detection + DeepSORT tracking</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-title">Stage 6: Pose Estimation</div>
-                    <div class="timeline-time">15-30 minutes</div>
-                    <div class="timeline-desc">MediaPipe 33-point pose estimation</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-title">Stage 7: Avatar Generation</div>
-                    <div class="timeline-time">20-40 minutes</div>
-                    <div class="timeline-desc">SMPL-X parametric body model with textures</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-title">Stage 8: Voice Cloning</div>
-                    <div class="timeline-time">10-20 minutes</div>
-                    <div class="timeline-desc">Extract audio, clone voices, train TTS</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-title">Stage 9: AI Training</div>
-                    <div class="timeline-time">5-10 minutes</div>
-                    <div class="timeline-desc">Build conversational AI with GPT-4/Claude</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-title">Stage 10: Dataset Export</div>
-                    <div class="timeline-time">10-20 minutes</div>
-                    <div class="timeline-desc">Package and export USD, ROS, URDF formats</div>
+                    <div class="timeline-title">Stages 5-10: Character & AI Processing</div>
+                    <div class="timeline-time">1-2 hours</div>
+                    <div class="timeline-desc">Human detection, pose estimation, avatar generation, voice cloning, AI training, dataset export</div>
                 </div>
             </div>
             
-            <div style="text-align: center; margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px;">
-                <div style="font-size: 2em; font-weight: bold;">Total: 4-7 hours</div>
-                <div style="font-size: 1.2em; opacity: 0.9;">Complete VR world with interactive AI characters</div>
-            </div>
-        </div>
-
-        <!-- Performance Stats -->
-        <div class="section">
-            <h2>📈 Performance Metrics</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">60+</div>
-                    <div class="stat-label">FPS in VR</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">4-7</div>
-                    <div class="stat-label">Hours Processing</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">10-25</div>
-                    <div class="stat-label">GB per Project</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">10</div>
-                    <div class="stat-label">Processing Stages</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Use Cases -->
-        <div class="section">
-            <h2>🎯 Use Cases</h2>
-            <div class="mermaid">
-mindmap
-  root((Ewigen))
-    B2C Consumer
-      Weddings
-        Relive ceremony
-        Interact with guests
-        Preserve memories
-      Family Events
-        Birthdays
-        Reunions
-        Celebrations
-      Entertainment
-        Concerts
-        Performances
-        Experiences
-    B2B Enterprise
-      Robotics Training
-        Humanoid robots
-        Navigation
-        Manipulation
-      AI Research
-        Synthetic data
-        Benchmarking
-        Testing
-      Real Estate
-        Virtual tours
-        Property showcase
-        Architecture
-            </div>
-        </div>
-
-        <!-- Deployment Architecture -->
-        <div class="section">
-            <h2>☁️ Cloud Deployment Architecture</h2>
-            <div class="mermaid">
-graph TB
-    subgraph Internet["🌐 INTERNET"]
-        Users["Users"]
-    end
-    
-    subgraph CDN["🚀 CDN Layer"]
-        CloudFront["CloudFront/CloudFlare"]
-    end
-    
-    subgraph LoadBalancer["⚖️ Load Balancer"]
-        ALB["Application Load Balancer"]
-    end
-    
-    subgraph WebTier["🖥️ Web Tier (Auto-scaling)"]
-        Web1["Next.js Instance 1"]
-        Web2["Next.js Instance 2"]
-        Web3["Next.js Instance N"]
-    end
-    
-    subgraph APITier["⚡ API Tier (Auto-scaling)"]
-        API1["FastAPI Instance 1"]
-        API2["FastAPI Instance 2"]
-        API3["FastAPI Instance N"]
-    end
-    
-    subgraph WorkerTier["🔧 Worker Tier (GPU Instances)"]
-        Worker1["Celery Worker 1<br/>RTX 4090"]
-        Worker2["Celery Worker 2<br/>RTX 4090"]
-        Worker3["Celery Worker N<br/>RTX 4090"]
-    end
-    
-    subgraph DataTier["💾 Data Tier"]
-        RDS["RDS PostgreSQL<br/>Multi-AZ"]
-        ElastiCache["ElastiCache Redis<br/>Cluster"]
-        S3["S3/MinIO<br/>Object Storage"]
-    end
-    
-    Users --> CloudFront
-    CloudFront --> ALB
-    ALB --> Web1
-    ALB --> Web2
-    ALB --> Web3
-    
-    Web1 --> API1
-    Web2 --> API2
-    Web3 --> API3
-    
-    API1 --> RDS
-    API2 --> RDS
-    API3 --> RDS
-    
-    API1 --> ElastiCache
-    API2 --> ElastiCache
-    API3 --> ElastiCache
-    
-    API1 --> S3
-    API2 --> S3
-    API3 --> S3
-    
-    ElastiCache --> Worker1
-    ElastiCache --> Worker2
-    ElastiCache --> Worker3
-    
-    Worker1 --> S3
-    Worker2 --> S3
-    Worker3 --> S3
-    
-    style Internet fill:#667eea,color:#fff
-    style CDN fill:#48bb78,color:#fff
-    style LoadBalancer fill:#ed8936,color:#fff
-    style WebTier fill:#9f7aea,color:#fff
-    style APITier fill:#38b2ac,color:#fff
-    style WorkerTier fill:#e53e3e,color:#fff
-    style DataTier fill:#764ba2,color:#fff
+            <div style="text-align: center; margin-top: 40px; padding: 40px; background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, rgba(83, 52, 131, 0.1) 100%); border-radius: 20px; border: 1px solid rgba(233, 69, 96, 0.2);">
+                <div style="font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem;">Total: 4-7 hours</div>
+                <div style="font-size: 1.3rem; color: var(--text-muted);">Complete VR world with interactive AI characters</div>
             </div>
         </div>
 
         <footer>
-            <p>⏳ Ewigen - Timeless Moments</p>
-            <p>Preserve timeless moments through cutting-edge AI, 3D reconstruction, and VR technology</p>
+            <div class="footer-logo">⏳ Ewigen</div>
+            <p class="footer-text">Timeless Moments - Preserve timeless moments through cutting-edge AI, 3D reconstruction, and VR technology</p>
+            <div class="social-links">
+                <a href="https://github.com/Crusherbolt/ewigen" target="_blank" title="GitHub">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+            </div>
+            <p style="margin-top: 2rem; color: var(--text-muted); font-size: 0.9rem;">© 2024 Ewigen. Built with ❤️ for the future of robotics and AI.</p>
         </footer>
     </div>
 
     <script>
+        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
-            theme: 'default',
+            theme: 'dark',
             themeVariables: {
                 primaryColor: '#e94560',
                 primaryTextColor: '#fff',
                 primaryBorderColor: '#533483',
                 lineColor: '#533483',
-                secondaryColor: '#48bb78',
-                tertiaryColor: '#ed8936'
+                secondaryColor: '#00d9ff',
+                tertiaryColor: '#f4a261',
+                background: '#0a0e27',
+                mainBkg: '#16213e',
+                secondBkg: '#1a1a2e',
+                textColor: '#e0e0e0',
+                fontSize: '16px'
             }
+        });
+        
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+        
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
     </script>
 </body>

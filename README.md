@@ -1,6 +1,6 @@
 # ⏳ Ewigen - Timeless Moments
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Architecture-e94560?style=for-the-badge)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Architecture-e94560?style=for-the-badge)](https://crusherbolt.github.io/ewigen/)
 [![License](https://img.shields.io/badge/License-MIT-533483?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10+-1a1a2e?style=for-the-badge&logo=python)](https://python.org)
 [![Docker](https://img.shields.io/badge/Docker-Ready-16213e?style=for-the-badge&logo=docker)](https://docker.com)
@@ -9,7 +9,7 @@
 
 ---
 
-## 🎯 [View Interactive Architecture →](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/)
+## 🎯 [View Interactive Architecture →](https://crusherbolt.github.io/ewigen/)
 
 ---
 
@@ -308,7 +308,7 @@ See `CLOUD_DEPLOYMENT_GUIDE.md` for detailed instructions.
 
 ## 📝 Documentation
 
-- **[Architecture Visualization](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/)** - Interactive system architecture
+- **[Architecture Visualization](https://crusherbolt.github.io/ewigen/)** - Interactive system architecture
 - **[GitHub Pages Setup](GITHUB_PAGES_SETUP.md)** - How to deploy the architecture page
 - **[API Documentation](http://localhost:8000/api/v1/docs)** - Swagger UI (when running)
 - **[Business Name Analysis](BUSINESS_NAME_ANALYSIS.md)** - Why "Ewigen"?
