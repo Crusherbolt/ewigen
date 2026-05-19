@@ -15,7 +15,7 @@
 
 ## 🌟 Project Overview
 
-**Ewigen** (German for "Eternal") is a cutting-edge platform that transforms multi-angle video recordings into fully interactive 3D virtual environments. Capture real-world spaces and moments, then relive them in immersive VR with AI-powered interactive characters.
+**Ewigen** (German for "Timeless") is a cutting-edge platform that transforms multi-angle video recordings into fully interactive 3D virtual environments. Capture real-world spaces and moments, then relive them in immersive VR with AI-powered interactive characters.
 
 ### Two Revolutionary Use Cases
 
