@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ewigen - Physical AI Dataset Generation Platform</title>
     <meta name="description" content="Ewigen - Revolutionary platform for robotics dataset generation and physical AI training through 3D environment reconstruction.">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -215,8 +214,8 @@
             line-height: 1.8;
         }
         
-        /* Diagram Container */
-        .diagram-container {
+        /* Animated Pipeline Diagram */
+        .pipeline-diagram {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 20px;
@@ -226,7 +225,7 @@
             overflow: hidden;
         }
         
-        .diagram-container::before {
+        .pipeline-diagram::before {
             content: '';
             position: absolute;
             top: 0;
@@ -236,9 +235,107 @@
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
         
-        .mermaid {
-            background: transparent !important;
-            padding: 40px 0;
+        .pipeline-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .pipeline-node {
+            flex: 1;
+            min-width: 150px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .pipeline-node.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .pipeline-node:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
+        }
+        
+        .pipeline-node .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .pipeline-node .label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+        
+        .pipeline-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* 3D Architecture Cards */
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            perspective: 1000px;
+        }
+        
+        .arch-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.5s;
+            transform-style: preserve-3d;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .arch-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .arch-card:hover {
+            transform: rotateY(5deg) rotateX(5deg) translateZ(20px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2);
+        }
+        
+        .arch-card .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .arch-card .title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .arch-card .desc {
+            color: var(--gray);
+            line-height: 1.6;
         }
         
         /* Feature Grid */
@@ -394,7 +491,15 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            .diagram-container {
+            .pipeline-flow {
+                flex-direction: column;
+            }
+            
+            .pipeline-arrow {
+                transform: rotate(90deg);
+            }
+            
+            .pipeline-diagram {
                 padding: 30px 20px;
             }
             
@@ -415,9 +520,9 @@
         <div class="hero-bg"></div>
         <div class="hero-grid"></div>
         <div class="hero-content">
-            <span class="hero-badge">SYNTHETIC DATASET GENERATION</span>
-            <h1>Transform Reality<br/>Into Digital Worlds</h1>
-            <p class="hero-subtitle">Revolutionary platform for 3D environment reconstruction and synthetic dataset generation for humanoid robotics and AI research</p>
+            <span class="hero-badge">ROBOTICS DATASET GENERATION</span>
+            <h1>Physical AI<br/>Dataset Generation</h1>
+            <p class="hero-subtitle">Revolutionary platform for robotics dataset generation through 3D environment reconstruction and motion capture for humanoid robots and physical AI systems</p>
             <div class="hero-cta">
                 <a href="https://github.com/Crusherbolt/ewigen" class="btn btn-primary" target="_blank">
                     <span>View on GitHub</span>
@@ -442,24 +547,24 @@
     <section class="story-section" id="story">
         <div class="container">
             <span class="section-number">01 — THE CHALLENGE</span>
-            <h2 class="section-title">Training Robots<br/>Needs Real-World Data</h2>
-            <p class="section-desc">Humanoid robots and AI systems require massive amounts of high-quality training data. Traditional data collection is expensive, time-consuming, and limited in scope.</p>
+            <h2 class="section-title">Physical AI Training<br/>Needs Real-World Data</h2>
+            <p class="section-desc">Humanoid robots and physical AI systems require massive amounts of high-quality robotics datasets. Traditional data collection is expensive, time-consuming, and limited in scope.</p>
             
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🤖</div>
-                    <h3 class="feature-title">Robot Training</h3>
-                    <p class="feature-desc">Generate diverse scenarios for humanoid robot training without physical setup</p>
+                    <h3 class="feature-title">Robotics Datasets</h3>
+                    <p class="feature-desc">Generate diverse robotics training datasets for humanoid robots without physical setup</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🎯</div>
-                    <h3 class="feature-title">Precision Data</h3>
-                    <p class="feature-desc">Sub-centimeter accuracy in 3D reconstruction and motion capture</p>
+                    <h3 class="feature-title">Physical AI Training</h3>
+                    <p class="feature-desc">Sub-centimeter accuracy datasets for physical AI systems and embodied intelligence</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
-                    <h3 class="feature-title">Rapid Generation</h3>
-                    <p class="feature-desc">Process 50 minutes of video into complete datasets in 4-7 hours</p>
+                    <h3 class="feature-title">Rapid Dataset Generation</h3>
+                    <p class="feature-desc">Process 50 minutes of video into complete robotics datasets in 4-7 hours</p>
                 </div>
             </div>
         </div>
@@ -469,28 +574,50 @@
     <section class="story-section">
         <div class="container">
             <span class="section-number">02 — THE SOLUTION</span>
-            <h2 class="section-title">From Videos to<br/>Virtual Worlds</h2>
-            <p class="section-desc">Ewigen transforms multi-angle video recordings into photorealistic 3D environments with accurate human motion capture, ready for robot training and AI research.</p>
+            <h2 class="section-title">From Videos to<br/>Robotics Datasets</h2>
+            <p class="section-desc">Ewigen transforms multi-angle video recordings into photorealistic 3D environments with accurate human motion capture, generating high-quality robotics datasets for physical AI training.</p>
             
-            <div class="diagram-container">
-                <div class="mermaid">
-graph LR
-    A["📹 Multi-Angle<br/>Videos"] --> B["🎬 Video<br/>Processing"]
-    B --> C["📷 Camera<br/>Calibration"]
-    C --> D["🌐 3D<br/>Reconstruction"]
-    D --> E["👤 Human<br/>Detection"]
-    E --> F["🎭 Avatar<br/>Generation"]
-    F --> G["📦 Dataset<br/>Export"]
-    G --> H["🤖 Robot<br/>Training"]
-    
-    style A fill:#00ff88,color:#000
-    style H fill:#0066ff,color:#fff
-    style B fill:#1a1a2f,color:#fff
-    style C fill:#1a1a2f,color:#fff
-    style D fill:#1a1a2f,color:#fff
-    style E fill:#1a1a2f,color:#fff
-    style F fill:#1a1a2f,color:#fff
-    style G fill:#1a1a2f,color:#fff
+            <div class="pipeline-diagram">
+                <div class="pipeline-flow">
+                    <div class="pipeline-node" style="transition-delay: 0.1s">
+                        <div class="icon">📹</div>
+                        <div class="label">Multi-Angle<br/>Videos</div>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-node" style="transition-delay: 0.2s">
+                        <div class="icon">🎬</div>
+                        <div class="label">Video<br/>Processing</div>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-node" style="transition-delay: 0.3s">
+                        <div class="icon">📷</div>
+                        <div class="label">Camera<br/>Calibration</div>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-node" style="transition-delay: 0.4s">
+                        <div class="icon">🌐</div>
+                        <div class="label">3D<br/>Reconstruction</div>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-node" style="transition-delay: 0.5s">
+                        <div class="icon">👤</div>
+                        <div class="label">Human<br/>Detection</div>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-node" style="transition-delay: 0.6s">
+                        <div class="icon">🎭</div>
+                        <div class="label">Avatar<br/>Generation</div>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-node" style="transition-delay: 0.7s">
+                        <div class="icon">📦</div>
+                        <div class="label">Dataset<br/>Export</div>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-node" style="transition-delay: 0.8s">
+                        <div class="icon">🤖</div>
+                        <div class="label">Robotics<br/>Datasets</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -501,7 +628,7 @@ graph LR
         <div class="container">
             <span class="section-number">03 — THE TECHNOLOGY</span>
             <h2 class="section-title">Powered by<br/>Cutting-Edge AI</h2>
-            <p class="section-desc">Built on state-of-the-art computer vision and deep learning technologies for maximum accuracy and performance.</p>
+            <p class="section-desc">Built on state-of-the-art computer vision and deep learning technologies for robotics dataset generation with maximum accuracy and performance.</p>
             
             <div class="tech-grid">
                 <div class="tech-item">PyTorch</div>
@@ -551,57 +678,38 @@ graph LR
         <div class="container">
             <span class="section-number">05 — THE ARCHITECTURE</span>
             <h2 class="section-title">Enterprise-Grade<br/>Infrastructure</h2>
-            <p class="section-desc">Scalable, distributed architecture designed for high-throughput dataset generation.</p>
+            <p class="section-desc">Scalable, distributed architecture designed for high-throughput robotics dataset generation and physical AI training data production.</p>
             
-            <div class="diagram-container">
-                <div class="mermaid">
-graph TB
-    subgraph Input["📥 INPUT"]
-        Videos["Multi-Angle Videos"]
-    end
-    
-    subgraph API["⚡ API LAYER"]
-        FastAPI["FastAPI Backend"]
-    end
-    
-    subgraph Storage["💾 STORAGE"]
-        DB["PostgreSQL"]
-        Cache["Redis"]
-        Files["MinIO"]
-    end
-    
-    subgraph Processing["🔄 PROCESSING"]
-        Workers["Celery Workers<br/>GPU Accelerated"]
-    end
-    
-    subgraph ML["🤖 ML PIPELINE"]
-        Stage1["Video Processing"]
-        Stage2["3D Reconstruction"]
-        Stage3["Human Analysis"]
-        Stage4["Dataset Export"]
-    end
-    
-    subgraph Output["📤 OUTPUT"]
-        Datasets["USD | ROS | URDF"]
-    end
-    
-    Videos --> FastAPI
-    FastAPI --> DB
-    FastAPI --> Cache
-    FastAPI --> Files
-    FastAPI --> Workers
-    Workers --> Stage1
-    Stage1 --> Stage2
-    Stage2 --> Stage3
-    Stage3 --> Stage4
-    Stage4 --> Datasets
-    
-    style Input fill:#00ff88,color:#000
-    style Output fill:#0066ff,color:#fff
-    style API fill:#1a1a2f,color:#fff
-    style Storage fill:#1a1a2f,color:#fff
-    style Processing fill:#1a1a2f,color:#fff
-    style ML fill:#1a1a2f,color:#fff
+            <div class="architecture-grid">
+                <div class="arch-card" style="transition-delay: 0.1s">
+                    <div class="icon">⚡</div>
+                    <div class="title">API Layer</div>
+                    <div class="desc">FastAPI backend with RESTful endpoints for video upload, processing management, and dataset export</div>
+                </div>
+                <div class="arch-card" style="transition-delay: 0.2s">
+                    <div class="icon">💾</div>
+                    <div class="title">Storage</div>
+                    <div class="desc">PostgreSQL for metadata, Redis for caching, MinIO for object storage with S3 compatibility</div>
+                </div>
+                <div class="arch-card" style="transition-delay: 0.3s">
+                    <div class="icon">🔄</div>
+                    <div class="title">Processing</div>
+                    <div class="desc">Celery workers with GPU acceleration for parallel video processing and 3D reconstruction</div>
+                </div>
+                <div class="arch-card" style="transition-delay: 0.4s">
+                    <div class="icon">🤖</div>
+                    <div class="title">ML Pipeline</div>
+                    <div class="desc">Multi-stage pipeline: video processing → 3D reconstruction → human analysis → dataset export</div>
+                </div>
+                <div class="arch-card" style="transition-delay: 0.5s">
+                    <div class="icon">📤</div>
+                    <div class="title">Output Formats</div>
+                    <div class="desc">Export to USD, ROS, URDF formats for seamless integration with robotics simulators</div>
+                </div>
+                <div class="arch-card" style="transition-delay: 0.6s">
+                    <div class="icon">☁️</div>
+                    <div class="title">Cloud Ready</div>
+                    <div class="desc">Docker containerized, Kubernetes orchestrated, AWS/GCP compatible deployment</div>
                 </div>
             </div>
         </div>
@@ -612,7 +720,7 @@ graph TB
         <div class="container" style="text-align: center;">
             <span class="section-number">06 — GET STARTED</span>
             <h2 class="section-title">Ready to Build<br/>the Future?</h2>
-            <p class="section-desc" style="margin: 30px auto 60px;">Join the revolution in synthetic dataset generation for robotics and AI.</p>
+            <p class="section-desc" style="margin: 30px auto 60px;">Join the revolution in robotics dataset generation and physical AI training data production.</p>
             <div class="hero-cta">
                 <a href="https://github.com/Crusherbolt/ewigen" class="btn btn-primary" target="_blank">
                     <span>View on GitHub</span>
@@ -628,35 +736,16 @@ graph TB
     <!-- Footer -->
     <footer>
         <div class="footer-logo">⏳ Ewigen</div>
-        <p style="color: var(--gray); margin-bottom: 30px;">Timeless Moments - Synthetic Dataset Generation Platform</p>
+        <p style="color: var(--gray); margin-bottom: 30px;">Timeless Moments - Robotics Dataset Generation Platform</p>
         <div class="footer-links">
             <a href="https://github.com/Crusherbolt/ewigen" target="_blank">GitHub</a>
             <a href="https://github.com/Crusherbolt/ewigen#readme" target="_blank">Documentation</a>
             <a href="https://github.com/Crusherbolt/ewigen/issues" target="_blank">Issues</a>
         </div>
-        <p style="color: var(--gray); font-size: 0.9rem; margin-top: 40px;">© 2024 Ewigen. Built for the future of robotics and AI.</p>
+        <p style="color: var(--gray); font-size: 0.9rem; margin-top: 40px;">© 2024 Ewigen. Built for robotics dataset generation and physical AI training.</p>
     </footer>
 
     <script>
-        // Initialize Mermaid with custom theme
-        mermaid.initialize({ 
-            startOnLoad: true,
-            theme: 'dark',
-            themeVariables: {
-                primaryColor: '#00ff88',
-                primaryTextColor: '#fff',
-                primaryBorderColor: '#00ff88',
-                lineColor: '#00ff88',
-                secondaryColor: '#0066ff',
-                tertiaryColor: '#1a1a2f',
-                background: '#0a0a0f',
-                mainBkg: '#1a1a2f',
-                textColor: '#ffffff',
-                fontSize: '16px',
-                fontFamily: 'Space Grotesk'
-            }
-        });
-        
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -683,11 +772,32 @@ graph TB
             });
         }, observerOptions);
         
-        document.querySelectorAll('.story-section, .feature-card, .tech-item').forEach(el => {
+        document.querySelectorAll('.story-section, .feature-card, .tech-item, .pipeline-node, .arch-card').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(30px)';
             el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
             observer.observe(el);
+        });
+        
+        // 3D card tilt effect
+        document.querySelectorAll('.arch-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+            });
         });
     </script>
 </body>
