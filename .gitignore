@@ -216,6 +216,11 @@ celerybeat.pid
 
 
 # Internal documentation and planning files
+# Hide all .md files except README.md
+*.md
+!README.md
+
+# Specific internal files (redundant but explicit)
 project.md
 ARCHITECTURE.md
 ARCHITECTURE_DIAGRAM.md
@@ -232,6 +237,9 @@ QUICKSTART.md
 SETUP_GUIDE.md
 BUSINESS_NAME_ANALYSIS.md
 GITHUB_PAGES_SETUP.md
+ENABLE_GITHUB_PAGES.md
+GITHUB_REPOSITORY_INFO.md
+GIT_PUSH_COMMANDS.md
 
 # Internal scripts and notes
 scripts/internal/
