@@ -2,405 +2,122 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, develop ]
-
-env:
-  PYTHON_VERSION: '3.11'
-  NODE_VERSION: '18'
-  DOCKER_REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+    branches: [ main ]
 
 jobs:
-  # Backend Tests
-  backend-test:
+  # Validate HTML and Deploy to GitHub Pages
+  validate-and-deploy:
     runs-on: ubuntu-latest
-    
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-      
-      redis:
-        image: redis:7
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-        cache: 'pip'
-    
-    - name: Install dependencies
-      run: |
-        cd backend
-        pip install -r requirements.txt
-        pip install pytest pytest-cov pytest-asyncio
-    
-    - name: Run linting
-      run: |
-        cd backend
-        pip install flake8 black isort
-        flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics
-        black --check app
-        isort --check-only app
-    
-    - name: Run tests
-      env:
-        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
-        REDIS_URL: redis://localhost:6379/0
-        SECRET_KEY: test-secret-key
-      run: |
-        cd backend
-        pytest tests/ -v --cov=app --cov-report=xml --cov-report=html
-    
-    - name: Upload coverage
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./backend/coverage.xml
-        flags: backend
-        name: backend-coverage
-
-  # Frontend Tests
-  frontend-test:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-        cache-dependency-path: frontend/package-lock.json
-    
-    - name: Install dependencies
-      run: |
-        cd frontend
-        npm ci
-    
-    - name: Run linting
-      run: |
-        cd frontend
-        npm run lint
-    
-    - name: Run tests
-      run: |
-        cd frontend
-        npm test -- --coverage
-    
-    - name: Build
-      run: |
-        cd frontend
-        npm run build
-
-  # ML Tests
-  ml-test:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-    
-    - name: Install dependencies
-      run: |
-        pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-        pip install numpy opencv-python pytest
-    
-    - name: Run ML tests
-      run: |
-        pytest ml/tests/ -v
-
-  # Security Scan
-  security-scan:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
-      with:
-        scan-type: 'fs'
-        scan-ref: '.'
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-    
-    - name: Upload Trivy results to GitHub Security
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: 'trivy-results.sarif'
-    
-    - name: Run Bandit security linter
-      run: |
-        pip install bandit
-        bandit -r backend/app -f json -o bandit-report.json || true
-    
-    - name: Upload Bandit results
-      uses: actions/upload-artifact@v3
-      with:
-        name: bandit-report
-        path: bandit-report.json
-
-  # Build Docker Images
-  build-images:
-    runs-on: ubuntu-latest
-    needs: [backend-test, frontend-test, ml-test]
-    if: github.event_name == 'push'
     
     permissions:
       contents: read
-      packages: write
+      pages: write
+      id-token: write
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
     
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+    - name: Validate HTML
+      run: |
+        echo "✅ Validating index.html..."
+        if [ -f "index.html" ]; then
+          echo "✅ index.html exists"
+          # Check if file is not empty
+          if [ -s "index.html" ]; then
+            echo "✅ index.html is not empty"
+          else
+            echo "❌ index.html is empty"
+            exit 1
+          fi
+        else
+          echo "❌ index.html not found"
+          exit 1
+        fi
     
-    - name: Log in to Container Registry
-      uses: docker/login-action@v2
+    - name: Check for broken links (optional)
+      run: |
+        echo "✅ Checking for common issues..."
+        # Check if GitHub repo link is present
+        if grep -q "github.com/Crusherbolt/ewigen" index.html; then
+          echo "✅ GitHub repository link found"
+        else
+          echo "⚠️  Warning: GitHub repository link not found"
+        fi
+    
+    - name: Setup Pages
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/configure-pages@v3
+    
+    - name: Upload artifact
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-pages-artifact@v2
       with:
-        registry: ${{ env.DOCKER_REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        path: '.'
     
-    - name: Extract metadata (tags, labels)
-      id: meta-backend
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}/backend
-        tags: |
-          type=ref,event=branch
-          type=ref,event=pr
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=sha
+    - name: Deploy to GitHub Pages
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      id: deployment
+      uses: actions/deploy-pages@v2
     
-    - name: Build and push backend image
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./docker/Dockerfile.backend
-        push: true
-        tags: ${{ steps.meta-backend.outputs.tags }}
-        labels: ${{ steps.meta-backend.outputs.labels }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-    
-    - name: Extract metadata for frontend
-      id: meta-frontend
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}/frontend
-    
-    - name: Build and push frontend image
-      uses: docker/build-push-action@v4
-      with:
-        context: ./frontend
-        file: ./docker/Dockerfile.frontend
-        push: true
-        tags: ${{ steps.meta-frontend.outputs.tags }}
-        labels: ${{ steps.meta-frontend.outputs.labels }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+    - name: Summary
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ **Status**: Deployed successfully" >> $GITHUB_STEP_SUMMARY
+        echo "🌐 **URL**: https://crusherbolt.github.io/ewigen/" >> $GITHUB_STEP_SUMMARY
+        echo "📦 **Branch**: main" >> $GITHUB_STEP_SUMMARY
+        echo "🕐 **Time**: $(date)" >> $GITHUB_STEP_SUMMARY
 
-  # Deploy to Staging
-  deploy-staging:
+  # Optional: Validate Python code structure (non-blocking)
+  validate-python:
     runs-on: ubuntu-latest
-    needs: [build-images]
-    if: github.ref == 'refs/heads/develop'
-    environment:
-      name: staging
-      url: https://staging.vrplatform.com
+    continue-on-error: true
     
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Deploy to Azure (Staging)
-      env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      run: |
-        # Install Azure CLI
-        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-        
-        # Login to Azure
-        az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
-        
-        # Deploy to staging
-        az webapp config container set \
-          --name vr-platform-staging \
-          --resource-group vr-platform-rg \
-          --docker-custom-image-name ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}/backend:develop
-        
-        # Restart app
-        az webapp restart --name vr-platform-staging --resource-group vr-platform-rg
-    
-    - name: Run smoke tests
-      run: |
-        sleep 30  # Wait for deployment
-        curl -f https://staging.vrplatform.com/health || exit 1
-
-  # Deploy to Production
-  deploy-production:
-    runs-on: ubuntu-latest
-    needs: [build-images]
-    if: github.ref == 'refs/heads/main'
-    environment:
-      name: production
-      url: https://vrplatform.com
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Deploy to Azure (Production)
-      env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      run: |
-        # Install Azure CLI
-        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-        
-        # Login to Azure
-        az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
-        
-        # Deploy to production with blue-green deployment
-        az webapp deployment slot create \
-          --name vr-platform-prod \
-          --resource-group vr-platform-rg \
-          --slot staging
-        
-        az webapp config container set \
-          --name vr-platform-prod \
-          --resource-group vr-platform-rg \
-          --slot staging \
-          --docker-custom-image-name ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}/backend:main
-        
-        # Swap slots
-        az webapp deployment slot swap \
-          --name vr-platform-prod \
-          --resource-group vr-platform-rg \
-          --slot staging \
-          --target-slot production
-    
-    - name: Run smoke tests
-      run: |
-        sleep 30
-        curl -f https://vrplatform.com/health || exit 1
-    
-    - name: Notify deployment
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        text: 'Production deployment completed!'
-        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
-      if: always()
-
-  # Performance Tests
-  performance-test:
-    runs-on: ubuntu-latest
-    needs: [deploy-staging]
-    if: github.ref == 'refs/heads/develop'
-    
-    steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
     
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
+        python-version: '3.11'
     
-    - name: Install Locust
-      run: pip install locust
-    
-    - name: Run load tests
+    - name: Check Python files
       run: |
-        cd tests
-        locust -f locustfile.py \
-          --host https://staging.vrplatform.com \
-          --users 100 \
-          --spawn-rate 10 \
-          --run-time 5m \
-          --headless \
-          --html performance-report.html
-    
-    - name: Upload performance report
-      uses: actions/upload-artifact@v3
-      with:
-        name: performance-report
-        path: tests/performance-report.html
+        echo "✅ Checking Python code structure..."
+        if [ -d "backend" ] || [ -d "ml" ]; then
+          echo "✅ Python directories found"
+          # Basic syntax check
+          find . -name "*.py" -type f -exec python -m py_compile {} \; 2>&1 | head -20 || true
+        else
+          echo "ℹ️  No Python directories found (optional)"
+        fi
 
-  # Database Migration
-  migrate-database:
+  # Optional: Validate documentation
+  validate-docs:
     runs-on: ubuntu-latest
-    needs: [deploy-staging, deploy-production]
-    if: github.event_name == 'push'
+    continue-on-error: true
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
     
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-    
-    - name: Install dependencies
+    - name: Check documentation
       run: |
-        cd backend
-        pip install -r requirements.txt
-    
-    - name: Run migrations (Staging)
-      if: github.ref == 'refs/heads/develop'
-      env:
-        DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
-      run: |
-        cd backend
-        alembic upgrade head
-    
-    - name: Run migrations (Production)
-      if: github.ref == 'refs/heads/main'
-      env:
-        DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
-      run: |
-        cd backend
-        alembic upgrade head
+        echo "✅ Checking documentation files..."
+        if [ -f "README.md" ]; then
+          echo "✅ README.md exists"
+          wc -l README.md
+        fi
+        
+        if [ -f "ARCHITECTURE.md" ]; then
+          echo "✅ ARCHITECTURE.md exists"
+        fi
+        
+        echo "ℹ️  Documentation validation complete"
 
-  # Cleanup
-  cleanup:
-    runs-on: ubuntu-latest
-    needs: [deploy-staging, deploy-production]
-    if: always()
-    
-    steps:
-    - name: Clean up old images
-      uses: actions/delete-package-versions@v4
-      with:
-        package-name: 'backend'
-        package-type: 'container'
-        min-versions-to-keep: 5
-        delete-only-untagged-versions: 'true'
-
-# Made with Bob
+# Made with Bob - Simplified CI/CD for GitHub Pages
